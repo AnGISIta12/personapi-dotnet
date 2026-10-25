@@ -1,0 +1,30 @@
+@model personapi_dotnet.Models.Entities.Estudio
+
+@{
+    ViewData["Title"] = "Eliminar";
+}
+
+<h1>Eliminar</h1>
+
+<h3>Seguro que quiere eliminar este estudio?</h3>
+<div>
+    <h4>Estudio</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Persona</dt>
+        <dd class="col-sm-10">@Model.CcPer - @Model.CcPerNavigation.Nombre @Model.CcPerNavigation.Apellido</dd>
+        <dt class="col-sm-2">Profesion</dt>
+        <dd class="col-sm-10">@Model.IdProf - @Model.IdProfNavigation.Nom</dd>
+        <dt class="col-sm-2">Fecha</dt>
+        <dd class="col-sm-10">@Model.Fecha?.ToString("yyyy-MM-dd")</dd>
+        <dt class="col-sm-2">Universidad</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Univer)</dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" name="idProf" value="@Model.IdProf" />
+        <input type="hidden" name="ccPer" value="@Model.CcPer" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Volver a la lista</a>
+    </form>
+</div>

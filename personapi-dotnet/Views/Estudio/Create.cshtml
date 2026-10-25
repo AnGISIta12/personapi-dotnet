@@ -1,0 +1,46 @@
+@model personapi_dotnet.Models.Entities.Estudio
+
+@{
+    ViewData["Title"] = "Crear";
+}
+
+<h1>Crear</h1>
+
+<h4>Estudio</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CcPer" class="control-label">Persona</label>
+                <select asp-for="CcPer" class="form-control" asp-items="ViewBag.CcPer"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdProf" class="control-label">Profesion</label>
+                <select asp-for="IdProf" class="form-control" asp-items="ViewBag.IdProf"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fecha" class="control-label"></label>
+                <input asp-for="Fecha" type="date" class="form-control" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Univer" class="control-label">Universidad</label>
+                <input asp-for="Univer" class="form-control" maxlength="50" />
+                <span asp-validation-for="Univer" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver a la lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

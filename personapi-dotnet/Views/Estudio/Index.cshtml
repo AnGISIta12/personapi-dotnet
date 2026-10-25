@@ -1,0 +1,37 @@
+@model IEnumerable<personapi_dotnet.Models.Entities.Estudio>
+
+@{
+    ViewData["Title"] = "Estudios";
+}
+
+<h1>Estudios</h1>
+
+<p>
+    <a asp-action="Create">Crear nuevo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Persona</th>
+            <th>Profesion</th>
+            <th>Fecha</th>
+            <th>Universidad</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.CcPer - @item.CcPerNavigation.Nombre @item.CcPerNavigation.Apellido</td>
+            <td>@item.IdProfNavigation.Nom</td>
+            <td>@item.Fecha?.ToString("yyyy-MM-dd")</td>
+            <td>@Html.DisplayFor(modelItem => item.Univer)</td>
+            <td>
+                <a asp-action="Edit" asp-route-idProf="@item.IdProf" asp-route-ccPer="@item.CcPer">Editar</a> |
+                <a asp-action="Details" asp-route-idProf="@item.IdProf" asp-route-ccPer="@item.CcPer">Detalles</a> |
+                <a asp-action="Delete" asp-route-idProf="@item.IdProf" asp-route-ccPer="@item.CcPer">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
