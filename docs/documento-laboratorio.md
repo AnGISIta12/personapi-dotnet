@@ -85,6 +85,28 @@ flowchart TD
 
 Las vistas y la API entran por controladores distintos, pero ambos pasan por las mismas interfaces y repositorios.
 
+### Diagramas C4
+
+El diseño se describe con tres niveles del modelo C4: contexto, contenedores y componentes. El nivel 4 (código) no se dibuja porque los cuatro repositorios tienen la misma forma.
+
+#### Nivel 1 — Contexto
+
+![Diagrama de contexto C4 de personapi-dotnet](diagramas/01-c4-contexto.png)
+
+Dos tipos de persona usan el sistema: quien navega las vistas y quien consume la API REST desde Swagger UI o un cliente HTTP. La base de datos es parte del sistema y aparece en el nivel 2.
+
+#### Nivel 2 — Contenedores
+
+![Diagrama de contenedores C4 de personapi-dotnet](diagramas/02-c4-contenedores.png)
+
+El sistema son dos contenedores: una aplicación web ASP.NET Core 7 que sirve las vistas y la API desde un solo proceso, y la base `persona_db` en SQL Server 2022. La aplicación habla con la base por EF Core.
+
+#### Nivel 3 — Componentes
+
+![Diagrama de componentes C4 de la aplicación web](diagramas/03-c4-componentes.png)
+
+En la aplicación web, los controladores MVC y API llaman a las interfaces DAO. Los repositorios las implementan y son los únicos que usan el `PersonaDbContext`. Swagger documenta los controladores API y `Program.cs` conecta las piezas.
+
 ### Modelo de datos
 
 El modelo tiene cuatro tablas. `estudios` es la tabla intermedia entre `persona` y `profesion`, con llave primaria compuesta. Una persona tiene muchos teléfonos.
