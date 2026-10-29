@@ -1,10 +1,3 @@
-@*
-    Vista Telefono/Index (READ - listado)
-    Tabla con todos los telefonos y su duenio.
-    Modelo: IEnumerable<Telefono>. El repositorio hace Include de
-    DuenioNavigation (la Persona duenia) para poder mostrar su nombre.
-    La llama: TelefonoController.Index() (GET /Telefono).
-*@
 @model IEnumerable<personapi_dotnet.Models.Entities.Telefono>
 
 @{
@@ -19,14 +12,6 @@
     <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear nuevo</a>
 </div>
 
-@*
-    - @foreach: una fila por telefono; Num y Oper con @Html.DisplayFor.
-    - La columna del duenio combina la FK (Duenio = cedula) con el nombre que
-      trae la propiedad de navegacion DuenioNavigation.
-    - asp-route-id="@item.Num": la PK es el numero (texto), que viaja en la URL
-      (/Telefono/Edit/3001234567) hacia el parametro "string id" de la accion.
-    - Si no hay registros se muestra un estado vacio con el boton para crear el primero.
-*@
 <div class="surface reveal" style="--i:1">
     @if (!Model.Any())
     {

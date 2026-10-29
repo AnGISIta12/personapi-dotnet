@@ -1,11 +1,3 @@
-@*
-    Vista Telefono/Delete (DELETE - confirmacion)
-    Muestra el telefono y pide confirmar el borrado.
-    Modelo: Telefono.
-    La llama: TelefonoController.Delete(string id) [GET], que no borra nada.
-    Envia a: TelefonoController.DeleteConfirmed(string id) [POST], expuesta como
-    "Delete" con [ActionName("Delete")].
-*@
 @model personapi_dotnet.Models.Entities.Telefono
 
 @{
@@ -37,11 +29,6 @@
         </div>
     </dl>
 
-    @*
-        Form POST con token antifalsificacion. El oculto name="id" envia el
-        numero (PK) al parametro "string id" de DeleteConfirmed. Telefono es
-        tabla hija sin dependientes, asi que se borra directamente.
-    *@
     <form asp-action="Delete">
         <input type="hidden" name="id" value="@Model.Num" />
         <div class="form-actions">

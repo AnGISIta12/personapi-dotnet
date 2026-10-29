@@ -1,9 +1,3 @@
-﻿/*
-  Estilos aislados del layout (Razor los empaqueta en personapi_dotnet.styles.css).
-  El sistema visual completo vive en wwwroot/css/site.css; aqui solo queda lo
-  propio del menu para que el nombre de la marca no se parta en pantallas chicas.
-*/
-
-a.navbar-brand {
+﻿a.navbar-brand {
   white-space: nowrap;
 }

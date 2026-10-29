@@ -1,12 +1,3 @@
-@*
-    Vista Telefono/Edit (UPDATE)
-    Permite cambiar el operador y el duenio de un telefono.
-    Modelo: Telefono.
-    La llama: TelefonoController.Edit(string id) [GET] (/Telefono/Edit/{num}),
-    que carga ViewData["Duenio"] con el duenio actual preseleccionado.
-    Envia a: TelefonoController.Edit(string id, Telefono) [POST], que verifica
-    que el numero de la URL coincida con el del formulario.
-*@
 @model personapi_dotnet.Models.Entities.Telefono
 
 @{
@@ -15,16 +6,6 @@
 
 <a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a teléfonos</a>
 
-@*
-    - El numero (PK) no se edita: va en <input type="hidden" asp-for="Num">
-      para enviarse en el POST, y se muestra en un input disabled (los campos
-      disabled no se envian, por eso hace falta el oculto).
-    - El duenio SI se puede cambiar porque es solo una FK, no parte de la llave;
-      por eso aqui si hay <select> con asp-items="ViewBag.Duenio" (a diferencia
-      de Estudio/Edit, donde persona y profesion forman la llave).
-    - Form POST con token antifalsificacion; asp-for y asp-validation-for como
-      en Create.
-*@
 <div class="surface form-card reveal" style="--i:1">
     <div class="form-head">
         <span class="icon-tile red"><i class="ph ph-phone"></i></span>
@@ -35,7 +16,6 @@
     </div>
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @* el numero es la llave, no se deja cambiar *@
         <input type="hidden" asp-for="Num" />
         <div class="row">
             <div class="col-md-6 form-group">
@@ -59,7 +39,6 @@
     </form>
 </div>
 
-@* Validacion del lado del cliente (ver _ValidationScriptsPartial). *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

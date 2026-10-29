@@ -1,11 +1,3 @@
-@*
-    Vista Estudio/Edit (UPDATE)
-    Permite cambiar la fecha y la universidad de un estudio existente.
-    Modelo: Estudio (con persona y profesion cargadas por Include).
-    La llama: EstudioController.Edit(int idProf, int ccPer) [GET]
-    (/Estudio/Edit?idProf=..&ccPer=..).
-    Envia a: EstudioController.Edit(Estudio) [POST].
-*@
 @model personapi_dotnet.Models.Entities.Estudio
 
 @{
@@ -14,18 +6,6 @@
 
 <a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a estudios</a>
 
-@*
-    La llave compuesta (IdProf, CcPer) NO se edita: cambiar persona o profesion
-    seria en realidad borrar un estudio y crear otro. Por eso:
-    - Dos <input type="hidden" asp-for>: envian ambas partes de la llave en el
-      POST para que el controlador sepa que fila actualizar.
-    - Dos <input disabled>: solo muestran la persona y la profesion (los campos
-      disabled no se envian). Usan ?. porque si el POST vuelve con errores el
-      modelo reconstruido no trae las propiedades de navegacion (son null).
-    - No hay <select> ni SelectList, a diferencia de Create.
-    El resto igual que Create: POST con token antifalsificacion, asp-for y
-    asp-validation-for para Fecha y Univer.
-*@
 <div class="surface form-card reveal" style="--i:1">
     <div class="form-head">
         <span class="icon-tile green"><i class="ph ph-graduation-cap"></i></span>
@@ -36,7 +16,6 @@
     </div>
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @* persona y profesion son la llave, solo se muestran *@
         <input type="hidden" asp-for="CcPer" />
         <input type="hidden" asp-for="IdProf" />
         <div class="row">
@@ -66,7 +45,6 @@
     </form>
 </div>
 
-@* Validacion del lado del cliente (ver _ValidationScriptsPartial). *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

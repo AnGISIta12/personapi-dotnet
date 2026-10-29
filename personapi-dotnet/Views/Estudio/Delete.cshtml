@@ -1,12 +1,3 @@
-@*
-    Vista Estudio/Delete (DELETE - confirmacion)
-    Muestra el estudio y pide confirmar el borrado.
-    Modelo: Estudio.
-    La llama: EstudioController.Delete(int idProf, int ccPer) [GET], que no
-    borra nada.
-    Envia a: EstudioController.DeleteConfirmed(int idProf, int ccPer) [POST],
-    expuesta como "Delete" con [ActionName("Delete")].
-*@
 @model personapi_dotnet.Models.Entities.Estudio
 
 @{
@@ -42,13 +33,6 @@
         </div>
     </dl>
 
-    @*
-        Form POST con token antifalsificacion. Como la llave es compuesta se
-        necesitan DOS campos ocultos; sus atributos name ("idProf" y "ccPer")
-        coinciden con los parametros de DeleteConfirmed para que el model
-        binding los asigne. Estudios es tabla hija, asi que se borra sin tocar
-        otras tablas.
-    *@
     <form asp-action="Delete">
         <input type="hidden" name="idProf" value="@Model.IdProf" />
         <input type="hidden" name="ccPer" value="@Model.CcPer" />

@@ -1,17 +1,9 @@
-@*
-    Vista Persona/Index (READ - listado)
-    Muestra en una tabla todas las personas registradas.
-    Modelo: IEnumerable<Persona>, la coleccion que devuelve el repositorio (DAO).
-    La llama: PersonaController.Index() (GET /Persona).
-    No tiene formulario; desde aqui se navega a Create, Edit, Details y Delete.
-*@
 @model IEnumerable<personapi_dotnet.Models.Entities.Persona>
 
 @{
     ViewData["Title"] = "Personas";
 }
 
-@* Encabezado de pagina: titulo y boton de crear. asp-action sin asp-controller asume el controlador actual (Persona). *@
 <div class="page-head reveal">
     <div>
         <h1>Personas</h1>
@@ -20,16 +12,6 @@
     <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear nueva</a>
 </div>
 
-@*
-    Tabla de resultados:
-    - @foreach recorre el modelo y genera una fila <tr> por persona.
-    - @Html.DisplayFor muestra cada propiedad con su plantilla de visualizacion
-      (formato segun el tipo y codificacion HTML para evitar inyeccion de scripts).
-    - Los enlaces usan asp-route-id="@item.Cc": la cedula (PK) viaja como
-      parametro "id" en la URL (/Persona/Edit/1010101010) y llega al parametro
-      "int id" de la accion del controlador.
-    - Si no hay registros se muestra un estado vacio con el boton para crear el primero.
-*@
 <div class="surface reveal" style="--i:1">
     @if (!Model.Any())
     {

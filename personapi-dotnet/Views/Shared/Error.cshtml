@@ -1,13 +1,4 @@
-﻿@*
-    Vista Shared/Error
-    Pagina generica de error (plantilla por defecto de ASP.NET Core).
-    Modelo: ErrorViewModel, con el RequestId de la peticion que fallo.
-    Se llama desde HomeController.Error(), al que redirige el middleware
-    UseExceptionHandler("/Home/Error") cuando ocurre una excepcion no controlada
-    fuera del entorno de desarrollo. Esta en Shared porque cualquier
-    controlador podria usarla.
-*@
-@model ErrorViewModel
+﻿@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
 }
@@ -21,7 +12,6 @@
         </div>
     </div>
 
-    @* El RequestId solo se muestra si existe; sirve para buscar el error en los logs. *@
     @if (Model.ShowRequestId)
     {
         <p><strong>Request ID:</strong> <code>@Model.RequestId</code></p>

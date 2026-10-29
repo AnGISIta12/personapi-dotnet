@@ -1,11 +1,3 @@
-@*
-    Vista Estudio/Index (READ - listado)
-    Tabla con todos los estudios (relacion persona-profesion).
-    Modelo: IEnumerable<Estudio>. El repositorio carga tambien las propiedades
-    de navegacion CcPerNavigation (Persona) e IdProfNavigation (Profesion) con
-    Include, para mostrar nombres y no solo las llaves numericas.
-    La llama: EstudioController.Index() (GET /Estudio).
-*@
 @model IEnumerable<personapi_dotnet.Models.Entities.Estudio>
 
 @{
@@ -19,20 +11,6 @@
     </div>
     <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear nuevo</a>
 </div>
-@*
-    - @foreach: una fila por estudio.
-    - Persona y Profesion se leen de las propiedades de navegacion.
-    - Fecha es DateTime? (nullable, columna DATE): con ?. y ToString("yyyy-MM-dd")
-      se muestra solo la fecha, sin la hora 00:00:00, y si es null no se
-      escribe nada en vez de lanzar una excepcion.
-    - LLAVE COMPUESTA: un estudio se identifica por (IdProf, CcPer), no por un
-      solo id. Por eso los enlaces no usan asp-route-id sino DOS parametros:
-      asp-route-idProf y asp-route-ccPer. Como no estan en la plantilla de ruta
-      {controller}/{action}/{id?}, el tag helper los pone en la query string
-      (/Estudio/Edit?idProf=1&ccPer=1010101010) y el model binding los asigna a
-      los parametros "int idProf, int ccPer" de la accion.
-    - Si no hay registros se muestra un estado vacio con el boton para crear el primero.
-*@
 <div class="surface reveal" style="--i:1">
     @if (!Model.Any())
     {

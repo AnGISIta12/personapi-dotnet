@@ -1,10 +1,3 @@
-@*
-    Vista Persona/Details (READ - un registro)
-    Muestra todos los datos de una persona, solo lectura.
-    Modelo: Persona.
-    La llama: PersonaController.Details(int id) [GET] (/Persona/Details/{cc}).
-    No envia formularios; solo enlaza a Edit y de vuelta a Index.
-*@
 @model personapi_dotnet.Models.Entities.Persona
 
 @{
@@ -13,12 +6,6 @@
 
 <a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a personas</a>
 
-@*
-    Lista de definicion (dl/dt/dd): dt = nombre del campo, dd = valor.
-    @Html.DisplayFor(model => model.X) muestra el valor con la plantilla segun
-    su tipo y codificado en HTML.
-    El enlace Editar pasa la cedula con asp-route-id="@Model.Cc".
-*@
 <div class="surface detail-card reveal" style="--i:1">
     <div class="form-head">
         <span class="icon-tile blue"><i class="ph ph-user"></i></span>

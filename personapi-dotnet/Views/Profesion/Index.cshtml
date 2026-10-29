@@ -1,17 +1,9 @@
-@*
-    Vista Profesion/Index (READ - listado)
-    Tabla con todas las profesiones.
-    Modelo: IEnumerable<Profesion>, devuelto por el repositorio (DAO).
-    La llama: ProfesionController.Index() (GET /Profesion).
-    Desde aqui se navega a Create, Edit, Details y Delete.
-*@
 @model IEnumerable<personapi_dotnet.Models.Entities.Profesion>
 
 @{
     ViewData["Title"] = "Profesiones";
 }
 
-@* Encabezado de pagina: titulo y boton de crear. asp-action sin asp-controller asume el controlador actual (Profesion). *@
 <div class="page-head reveal">
     <div>
         <h1>Profesiones</h1>
@@ -20,12 +12,6 @@
     <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear nueva</a>
 </div>
 
-@*
-    @foreach genera una fila por profesion; @Html.DisplayFor muestra cada valor
-    codificado en HTML. asp-route-id="@item.Id" pone la PK en la URL
-    (/Profesion/Edit/1), que llega al parametro "int id" de la accion.
-    Si no hay registros se muestra un estado vacio con el boton para crear la primera.
-*@
 <div class="surface reveal" style="--i:1">
     @if (!Model.Any())
     {

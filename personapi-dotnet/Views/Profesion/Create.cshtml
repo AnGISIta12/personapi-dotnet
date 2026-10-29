@@ -1,11 +1,3 @@
-@*
-    Vista Profesion/Create (CREATE)
-    Formulario para registrar una profesion nueva.
-    Modelo: Profesion (vacio en el GET; con los datos digitados si el POST
-    tiene errores de validacion).
-    La llama: ProfesionController.Create() [GET].
-    Envia a: ProfesionController.Create(Profesion) [POST].
-*@
 @model personapi_dotnet.Models.Entities.Profesion
 
 @{
@@ -14,18 +6,6 @@
 
 <a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a profesiones</a>
 
-@*
-    - <form asp-action="Create">: POST a /Profesion/Create con token
-      antifalsificacion (__RequestVerificationToken) agregado automaticamente.
-    - asp-validation-summary="ModelOnly": errores generales del modelo.
-    - asp-for enlaza cada campo con la propiedad (name/id, tipo, data-val-*).
-      Cuando el <label> ya trae texto ("Nombre", "Descripción") ese texto se
-      respeta; si estuviera vacio, el tag helper pondria el nombre de la
-      propiedad (Nom, Des), que es poco claro para el usuario.
-    - El Id se digita porque en la tabla no es IDENTITY; si ya existe, el
-      controlador agrega el error al campo "Id" y sale en su asp-validation-for.
-    - Des usa <textarea> porque es VARCHAR(MAX) (texto largo).
-*@
 <div class="surface form-card reveal" style="--i:1">
     <div class="form-head">
         <span class="icon-tile yellow"><i class="ph ph-briefcase"></i></span>
@@ -60,10 +40,6 @@
     </form>
 </div>
 
-@*
-    Seccion Scripts: se renderiza en _Layout y carga la validacion del lado del
-    cliente (_ValidationScriptsPartial).
-*@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

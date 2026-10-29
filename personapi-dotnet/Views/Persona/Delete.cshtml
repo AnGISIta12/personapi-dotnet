@@ -1,12 +1,3 @@
-@*
-    Vista Persona/Delete (DELETE - confirmacion)
-    Muestra los datos de la persona y pide confirmar antes de borrar.
-    Modelo: Persona.
-    La llama: PersonaController.Delete(int id) [GET]. Ese GET NO borra nada:
-    un simple enlace (o un buscador que lo siga) no debe poder eliminar datos.
-    Envia a: PersonaController.DeleteConfirmed(int id) [POST], que en MVC se
-    llama "Delete" gracias a [ActionName("Delete")].
-*@
 @model personapi_dotnet.Models.Entities.Persona
 
 @{
@@ -46,15 +37,6 @@
         </div>
     </dl>
 
-    @*
-        Formulario de confirmacion: POST a /Persona/Delete con el token
-        antifalsificacion que agrega el tag helper del form.
-        El campo oculto name="id" lleva la cedula (PK) que recibe el parametro
-        "int id" de DeleteConfirmed; no se muestra porque la llave no se edita,
-        solo identifica el registro a borrar.
-        El repositorio borra antes los telefonos y estudios de la persona para no
-        violar las llaves foraneas (de ahi la advertencia de arriba).
-    *@
     <form asp-action="Delete">
         <input type="hidden" name="id" value="@Model.Cc" />
         <div class="form-actions">

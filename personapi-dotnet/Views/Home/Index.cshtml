@@ -1,22 +1,7 @@
-﻿@*
-    Vista Home/Index
-    Pagina de inicio de la aplicacion. No recibe modelo (no hay @model).
-    Se llama desde HomeController.Index() (ruta por defecto "/").
-    Ofrece accesos directos a los cuatro CRUD y a la documentacion Swagger.
-    ViewData["Title"] lo lee _Layout para armar el <title> de la pestania.
-*@
-@{
+﻿@{
     ViewData["Title"] = "Inicio";
 }
 
-@*
-    asp-controller + asp-action generan la URL correcta (/Persona/Index, etc.)
-    segun la tabla de rutas, en vez de escribirla a mano. Swagger no es una
-    accion MVC sino un middleware, por eso usa href directo; "~/" significa la
-    raiz de la aplicacion.
-    La clase "reveal" con --i hace que los bloques aparezcan escalonados (solo
-    si el usuario no pidio reducir el movimiento).
-*@
 <section class="hero reveal">
     <h1>Persona API-dotnet</h1>
     <p>CRUD de personas, profesiones, estudios y telefonos (MVC + DAO)</p>
