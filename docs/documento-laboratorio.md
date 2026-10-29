@@ -87,7 +87,7 @@ Las vistas y la API entran por controladores distintos, pero ambos pasan por las
 
 ### Diagramas C4
 
-El diseño se describe con tres niveles del modelo C4: contexto, contenedores y componentes. El nivel 4 (código) no se dibuja porque los cuatro repositorios tienen la misma forma.
+El diseño se describe con los cuatro niveles del modelo C4: contexto, contenedores, componentes y código.
 
 #### Nivel 1 — Contexto
 
@@ -106,6 +106,12 @@ El sistema son dos contenedores: una aplicación web ASP.NET Core 7 que sirve la
 ![Diagrama de componentes C4 de la aplicación web](diagramas/03-c4-componentes.png)
 
 En la aplicación web, los controladores MVC y API llaman a las interfaces DAO. Los repositorios las implementan y son los únicos que usan el `PersonaDbContext`. Swagger documenta los controladores API y `Program.cs` conecta las piezas.
+
+#### Nivel 4 — Código
+
+![Diagrama de código C4: de EstudioApiController a la entidad Estudio](diagramas/04-c4-codigo.png)
+
+El nivel 4 baja al código de C# y toma la entidad `Estudio` como ejemplo; Persona, Profesión y Teléfono tienen la misma forma. El controlador solo conoce interfaces. `EstudioRepository` implementa la suya y es quien usa el `PersonaDbContext`.
 
 ### Modelo de datos
 
