@@ -1,39 +1,81 @@
+@*
+    Vista Persona/Index (READ - listado)
+    Muestra en una tabla todas las personas registradas.
+    Modelo: IEnumerable<Persona>, la coleccion que devuelve el repositorio (DAO).
+    La llama: PersonaController.Index() (GET /Persona).
+    No tiene formulario; desde aqui se navega a Create, Edit, Details y Delete.
+*@
 @model IEnumerable<personapi_dotnet.Models.Entities.Persona>
 
 @{
     ViewData["Title"] = "Personas";
 }
 
-<h1>Personas</h1>
+@* Encabezado de pagina: titulo y boton de crear. asp-action sin asp-controller asume el controlador actual (Persona). *@
+<div class="page-head reveal">
+    <div>
+        <h1>Personas</h1>
+        <p class="lede">Todas las personas registradas. Desde aquí puedes ver sus datos, editarlas o eliminarlas.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear nueva</a>
+</div>
 
-<p>
-    <a asp-action="Create">Crear nueva</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Cedula</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Genero</th>
-            <th>Edad</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.Cc)</td>
-            <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
-            <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
-            <td>@Html.DisplayFor(modelItem => item.Genero)</td>
-            <td>@Html.DisplayFor(modelItem => item.Edad)</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Cc">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.Cc">Detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.Cc">Eliminar</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@*
+    Tabla de resultados:
+    - @foreach recorre el modelo y genera una fila <tr> por persona.
+    - @Html.DisplayFor muestra cada propiedad con su plantilla de visualizacion
+      (formato segun el tipo y codificacion HTML para evitar inyeccion de scripts).
+    - Los enlaces usan asp-route-id="@item.Cc": la cedula (PK) viaja como
+      parametro "id" en la URL (/Persona/Edit/1010101010) y llega al parametro
+      "int id" de la accion del controlador.
+    - Si no hay registros se muestra un estado vacio con el boton para crear el primero.
+*@
+<div class="surface reveal" style="--i:1">
+    @if (!Model.Any())
+    {
+        <div class="empty">
+            <i class="ph ph-users"></i>
+            <h3>Aún no hay personas</h3>
+            <p>Crea la primera persona para empezar a registrar sus teléfonos y estudios.</p>
+            <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear persona</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Cédula</th>
+                        <th>Nombre</th>
+                        <th>Género</th>
+                        <th>Edad</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model) {
+                    <tr>
+                        <td class="num">@Html.DisplayFor(modelItem => item.Cc)</td>
+                        <td>
+                            <span class="who">
+                                <span class="avatar">@(string.IsNullOrEmpty(item.Nombre) ? "?" : item.Nombre.Substring(0, 1).ToUpper())</span>
+                                <span>@Html.DisplayFor(modelItem => item.Nombre) @Html.DisplayFor(modelItem => item.Apellido)</span>
+                            </span>
+                        </td>
+                        <td><span class="tag @(item.Genero == "F" ? "red" : "blue")">@Html.DisplayFor(modelItem => item.Genero)</span></td>
+                        <td>@Html.DisplayFor(modelItem => item.Edad)</td>
+                        <td class="text-end-cell">
+                            <span class="row-actions">
+                                <a class="row-action" asp-action="Edit" asp-route-id="@item.Cc"><i class="ph ph-pencil-simple"></i>Editar</a>
+                                <a class="row-action" asp-action="Details" asp-route-id="@item.Cc"><i class="ph ph-eye"></i>Detalles</a>
+                                <a class="row-action danger" asp-action="Delete" asp-route-id="@item.Cc"><i class="ph ph-trash"></i>Eliminar</a>
+                            </span>
+                        </td>
+                    </tr>
+            }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

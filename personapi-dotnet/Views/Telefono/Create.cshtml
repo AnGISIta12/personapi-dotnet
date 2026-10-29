@@ -1,42 +1,67 @@
+@*
+    Vista Telefono/Create (CREATE)
+    Formulario para registrar un telefono y asignarle un duenio.
+    Modelo: Telefono (vacio en el GET; con lo digitado si el POST falla).
+    La llama: TelefonoController.Create() [GET], que antes llena
+    ViewData["Duenio"] con la lista de personas (metodo CargarPersonas).
+    Envia a: TelefonoController.Create(Telefono) [POST].
+*@
 @model personapi_dotnet.Models.Entities.Telefono
 
 @{
-    ViewData["Title"] = "Crear";
+    ViewData["Title"] = "Crear teléfono";
 }
 
-<h1>Crear</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a teléfonos</a>
 
-<h4>Telefono</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Num" class="control-label">Numero</label>
+@*
+    - <form asp-action="Create">: POST con token antifalsificacion automatico.
+    - asp-for / asp-validation-for: enlace y validacion de cada campo. Si el
+      numero ya existe, el controlador agrega el error al campo "Num".
+    - Num lleva maxlength="15" para coincidir con VARCHAR(15) en la base.
+    - <select asp-for="Duenio" asp-items="ViewBag.Duenio">: asp-items toma el
+      SelectList guardado en ViewData["Duenio"] (ViewBag es el mismo
+      diccionario) y genera un <option> por persona (value = cedula). El valor
+      elegido llega a la propiedad Duenio (la FK). Elegir de una lista evita
+      digitar una cedula inexistente que violaria telefono_persona_fk.
+*@
+<div class="surface form-card reveal" style="--i:1">
+    <div class="form-head">
+        <span class="icon-tile red"><i class="ph ph-phone"></i></span>
+        <div>
+            <h2>Nuevo teléfono</h2>
+            <p>Completa los datos y elige a su dueño.</p>
+        </div>
+    </div>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label asp-for="Num" class="control-label">Número</label>
                 <input asp-for="Num" class="form-control" maxlength="15" />
                 <span asp-validation-for="Num" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="Oper" class="control-label">Operador</label>
                 <input asp-for="Oper" class="form-control" />
                 <span asp-validation-for="Oper" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="Duenio" class="control-label">Dueño</label>
                 <select asp-for="Duenio" class="form-control" asp-items="ViewBag.Duenio"></select>
             </div>
-            <div class="form-group mt-2">
-                <input type="submit" value="Crear" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Crear" class="btn btn-primary" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Volver a la lista</a>
-</div>
-
+@*
+    Seccion Scripts: se renderiza en _Layout y carga la validacion del lado del
+    cliente (_ValidationScriptsPartial).
+*@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

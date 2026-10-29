@@ -1,43 +1,65 @@
+@*
+    Vista Telefono/Edit (UPDATE)
+    Permite cambiar el operador y el duenio de un telefono.
+    Modelo: Telefono.
+    La llama: TelefonoController.Edit(string id) [GET] (/Telefono/Edit/{num}),
+    que carga ViewData["Duenio"] con el duenio actual preseleccionado.
+    Envia a: TelefonoController.Edit(string id, Telefono) [POST], que verifica
+    que el numero de la URL coincida con el del formulario.
+*@
 @model personapi_dotnet.Models.Entities.Telefono
 
 @{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Editar teléfono";
 }
 
-<h1>Editar</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a teléfonos</a>
 
-<h4>Telefono</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @* el numero es la llave, no se deja cambiar *@
-            <input type="hidden" asp-for="Num" />
-            <div class="form-group">
-                <label class="control-label">Numero</label>
+@*
+    - El numero (PK) no se edita: va en <input type="hidden" asp-for="Num">
+      para enviarse en el POST, y se muestra en un input disabled (los campos
+      disabled no se envian, por eso hace falta el oculto).
+    - El duenio SI se puede cambiar porque es solo una FK, no parte de la llave;
+      por eso aqui si hay <select> con asp-items="ViewBag.Duenio" (a diferencia
+      de Estudio/Edit, donde persona y profesion forman la llave).
+    - Form POST con token antifalsificacion; asp-for y asp-validation-for como
+      en Create.
+*@
+<div class="surface form-card reveal" style="--i:1">
+    <div class="form-head">
+        <span class="icon-tile red"><i class="ph ph-phone"></i></span>
+        <div>
+            <h2>Editar teléfono</h2>
+            <p>Actualiza el operador o el dueño. El número no se puede cambiar.</p>
+        </div>
+    </div>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @* el numero es la llave, no se deja cambiar *@
+        <input type="hidden" asp-for="Num" />
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label class="control-label">Número</label>
                 <input value="@Model.Num" class="form-control" disabled />
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="Oper" class="control-label">Operador</label>
                 <input asp-for="Oper" class="form-control" />
                 <span asp-validation-for="Oper" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="Duenio" class="control-label">Dueño</label>
                 <select asp-for="Duenio" class="form-control" asp-items="ViewBag.Duenio"></select>
             </div>
-            <div class="form-group mt-2">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Volver a la lista</a>
-</div>
-
+@* Validacion del lado del cliente (ver _ValidationScriptsPartial). *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -1,35 +1,76 @@
+@*
+    Vista Telefono/Index (READ - listado)
+    Tabla con todos los telefonos y su duenio.
+    Modelo: IEnumerable<Telefono>. El repositorio hace Include de
+    DuenioNavigation (la Persona duenia) para poder mostrar su nombre.
+    La llama: TelefonoController.Index() (GET /Telefono).
+*@
 @model IEnumerable<personapi_dotnet.Models.Entities.Telefono>
 
 @{
-    ViewData["Title"] = "Telefonos";
+    ViewData["Title"] = "Teléfonos";
 }
 
-<h1>Telefonos</h1>
+<div class="page-head reveal">
+    <div>
+        <h1>Teléfonos</h1>
+        <p class="lede">Todos los teléfonos registrados y a quién pertenecen. Desde aquí puedes ver sus datos, editarlos o eliminarlos.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear nuevo</a>
+</div>
 
-<p>
-    <a asp-action="Create">Crear nuevo</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Numero</th>
-            <th>Operador</th>
-            <th>Dueño</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.Num)</td>
-            <td>@Html.DisplayFor(modelItem => item.Oper)</td>
-            <td>@item.Duenio - @item.DuenioNavigation.Nombre @item.DuenioNavigation.Apellido</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Num">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.Num">Detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.Num">Eliminar</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@*
+    - @foreach: una fila por telefono; Num y Oper con @Html.DisplayFor.
+    - La columna del duenio combina la FK (Duenio = cedula) con el nombre que
+      trae la propiedad de navegacion DuenioNavigation.
+    - asp-route-id="@item.Num": la PK es el numero (texto), que viaja en la URL
+      (/Telefono/Edit/3001234567) hacia el parametro "string id" de la accion.
+    - Si no hay registros se muestra un estado vacio con el boton para crear el primero.
+*@
+<div class="surface reveal" style="--i:1">
+    @if (!Model.Any())
+    {
+        <div class="empty">
+            <i class="ph ph-phone"></i>
+            <h3>Aún no hay teléfonos</h3>
+            <p>Registra el primer teléfono y asígnalo a su dueño.</p>
+            <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear teléfono</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Operador</th>
+                        <th>Dueño</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model) {
+                    <tr>
+                        <td class="num">@Html.DisplayFor(modelItem => item.Num)</td>
+                        <td><span class="tag red">@Html.DisplayFor(modelItem => item.Oper)</span></td>
+                        <td>
+                            <span class="who">
+                                <span class="avatar">@(string.IsNullOrEmpty(item.DuenioNavigation.Nombre) ? "?" : item.DuenioNavigation.Nombre.Substring(0, 1).ToUpper())</span>
+                                <span>@item.Duenio - @item.DuenioNavigation.Nombre @item.DuenioNavigation.Apellido</span>
+                            </span>
+                        </td>
+                        <td class="text-end-cell">
+                            <span class="row-actions">
+                                <a class="row-action" asp-action="Edit" asp-route-id="@item.Num"><i class="ph ph-pencil-simple"></i>Editar</a>
+                                <a class="row-action" asp-action="Details" asp-route-id="@item.Num"><i class="ph ph-eye"></i>Detalles</a>
+                                <a class="row-action danger" asp-action="Delete" asp-route-id="@item.Num"><i class="ph ph-trash"></i>Eliminar</a>
+                            </span>
+                        </td>
+                    </tr>
+            }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

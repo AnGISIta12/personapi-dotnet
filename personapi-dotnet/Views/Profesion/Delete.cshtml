@@ -1,27 +1,52 @@
+@*
+    Vista Profesion/Delete (DELETE - confirmacion)
+    Muestra la profesion y pide confirmar el borrado.
+    Modelo: Profesion.
+    La llama: ProfesionController.Delete(int id) [GET], que no borra nada.
+    Envia a: ProfesionController.DeleteConfirmed(int id) [POST], expuesta como
+    "Delete" con [ActionName("Delete")].
+*@
 @model personapi_dotnet.Models.Entities.Profesion
 
 @{
-    ViewData["Title"] = "Eliminar";
+    ViewData["Title"] = "Eliminar profesión";
 }
 
-<h1>Eliminar</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a profesiones</a>
 
-<h3>Seguro que quiere eliminar esta profesion? Tambien se borran los estudios que la usan.</h3>
-<div>
-    <h4>Profesion</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Id</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Id)</dd>
-        <dt class="col-sm-2">Nombre</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Nom)</dd>
-        <dt class="col-sm-2">Descripcion</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Des)</dd>
+<div class="surface detail-card danger-card reveal" style="--i:1">
+    <div class="warning">
+        <i class="ph ph-warning"></i>
+        <div>
+            <strong>¿Seguro que quieres eliminar esta profesión?</strong>
+            <span>También se borrarán los estudios que la usan. Esta acción no se puede deshacer.</span>
+        </div>
+    </div>
+    <dl class="detail-list">
+        <div class="detail-item">
+            <dt>Id</dt>
+            <dd>@Html.DisplayFor(model => model.Id)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Nombre</dt>
+            <dd>@Html.DisplayFor(model => model.Nom)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Descripción</dt>
+            <dd>@Html.DisplayFor(model => model.Des)</dd>
+        </div>
     </dl>
 
+    @*
+        Form POST con token antifalsificacion. El oculto name="id" envia la PK
+        al parametro "int id" de DeleteConfirmed. El repositorio borra primero
+        los estudios que usan esta profesion (FK estudio_profesion_fk).
+    *@
     <form asp-action="Delete">
         <input type="hidden" name="id" value="@Model.Id" />
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver a la lista</a>
+        <div class="form-actions">
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
     </form>
 </div>

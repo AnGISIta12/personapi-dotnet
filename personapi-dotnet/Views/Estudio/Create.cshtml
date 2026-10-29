@@ -1,46 +1,76 @@
+@*
+    Vista Estudio/Create (CREATE)
+    Formulario para registrar que una persona estudio una profesion.
+    Modelo: Estudio (vacio en el GET; con lo digitado si el POST falla).
+    La llama: EstudioController.Create() [GET], que antes llena ViewData con las
+    listas de personas y profesiones (metodo CargarListas).
+    Envia a: EstudioController.Create(Estudio) [POST].
+*@
 @model personapi_dotnet.Models.Entities.Estudio
 
 @{
-    ViewData["Title"] = "Crear";
+    ViewData["Title"] = "Crear estudio";
 }
 
-<h1>Crear</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a estudios</a>
 
-<h4>Estudio</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
+@*
+    - <form asp-action="Create">: POST con token antifalsificacion automatico.
+    - asp-validation-summary="All" (y no ModelOnly como en las otras vistas):
+      el error "Esa persona ya tiene registrada esa profesion" es del modelo
+      completo (la combinacion de las dos llaves) y los <select> no tienen su
+      propio asp-validation-for, asi que el resumen muestra todos los errores.
+    - <select asp-for="CcPer" asp-items="ViewBag.CcPer">: asp-items recibe el
+      SelectList que el controlador guardo en ViewData["CcPer"] (ViewBag y
+      ViewData son el mismo diccionario) y genera un <option> por persona
+      (value = cedula, texto = "cedula - nombre apellido"). asp-for hace que el
+      valor elegido llegue a la propiedad CcPer. Lo mismo para IdProf con las
+      profesiones. Asi el usuario solo puede elegir llaves que existen, lo que
+      respeta las FK de la tabla estudios.
+    - Fecha usa type="date" para mostrar el selector de fecha del navegador.
+    - Univer lleva maxlength="50" para coincidir con VARCHAR(50) en la base.
+*@
+<div class="surface form-card reveal" style="--i:1">
+    <div class="form-head">
+        <span class="icon-tile green"><i class="ph ph-graduation-cap"></i></span>
+        <div>
+            <h2>Nuevo estudio</h2>
+            <p>Elige la persona y la profesión, y completa los datos.</p>
+        </div>
+    </div>
+    <form asp-action="Create">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-6 form-group">
                 <label asp-for="CcPer" class="control-label">Persona</label>
                 <select asp-for="CcPer" class="form-control" asp-items="ViewBag.CcPer"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="IdProf" class="control-label">Profesion</label>
+            <div class="col-md-6 form-group">
+                <label asp-for="IdProf" class="control-label">Profesión</label>
                 <select asp-for="IdProf" class="form-control" asp-items="ViewBag.IdProf"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
+            <div class="col-md-6 form-group">
+                <label asp-for="Fecha" class="control-label">Fecha</label>
                 <input asp-for="Fecha" type="date" class="form-control" />
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="Univer" class="control-label">Universidad</label>
                 <input asp-for="Univer" class="form-control" maxlength="50" />
                 <span asp-validation-for="Univer" class="text-danger"></span>
             </div>
-            <div class="form-group mt-2">
-                <input type="submit" value="Crear" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Crear" class="btn btn-primary" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Volver a la lista</a>
-</div>
-
+@*
+    Seccion Scripts: se renderiza en _Layout y carga la validacion del lado del
+    cliente (_ValidationScriptsPartial).
+*@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

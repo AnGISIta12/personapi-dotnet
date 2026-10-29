@@ -1,64 +1,122 @@
-﻿<!DOCTYPE html>
+﻿@*
+    Shared/_Layout.cshtml
+    Plantilla maestra comun a todas las vistas (la asigna _ViewStart). Define la
+    estructura que se repite en cada pagina: <head> con estilos, barra de
+    navegacion, contenedor principal, pie de pagina y scripts. Cada vista solo
+    aporta su contenido propio, que se inserta en @RenderBody().
+    No tiene @model: la comunicacion con las vistas es por ViewData (Title) y
+    por secciones (Scripts).
+*@
+@{
+    // Controlador de la pagina actual; solo sirve para resaltar su enlace en el menu.
+    var seccionActual = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+}
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - personapi_dotnet</title>
+    @* Cada vista define ViewData["Title"]; aqui se usa para el titulo de la pestania. *@
+    <title>@ViewData["Title"] - PersonaAPI</title>
+    @*
+        Tipografia (Geist) e iconos (Phosphor) desde CDN. Si no hay internet la
+        pagina sigue funcionando: se usa la fuente del sistema y solo faltan los
+        iconos decorativos, porque cada enlace conserva su texto.
+    *@
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="https://unpkg.com/@@phosphor-icons/web@@2.1.1/src/regular/style.css" />
+    @*
+        Estilos: Bootstrap (libreria local en wwwroot/lib), site.css propio (sistema
+        visual de la aplicacion) y el CSS aislado por vista (personapi-dotnet.styles.css).
+        asp-append-version agrega un hash del archivo a la URL (?v=...) para que el
+        navegador no use una copia vieja en cache cuando el archivo cambia. "~/" es
+        la raiz de wwwroot.
+    *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/personapi_dotnet.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/personapi-dotnet.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">personapi_dotnet</a>
+    @*
+        Menu de navegacion (navbar de Bootstrap, se colapsa en pantallas pequenias
+        con el boton "navbar-toggler").
+        Cada enlace usa asp-controller + asp-action: el tag helper genera la URL
+        segun la ruta por defecto {controller}/{action}/{id?} de Program.cs, asi
+        que si cambia la ruta no hay que corregir los enlaces a mano.
+        asp-area="" indica que los controladores no estan dentro de un Area.
+        El enlace de la seccion en la que esta el usuario recibe la clase "active".
+        Swagger no es un controlador MVC sino la interfaz de UseSwaggerUI, por eso
+        usa un href fijo a ~/swagger para probar la API REST.
+    *@
+    <header class="app-nav">
+        <nav class="navbar navbar-expand-md">
+            <div class="container">
+                <a class="navbar-brand brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="brand-mark"><i class="ph ph-identification-card"></i></span>
+                    PersonaAPI
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                        aria-expanded="false" aria-label="Abrir menu">
+                    <i class="ph ph-list"></i>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav flex-grow-1 align-items-md-center">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link @(seccionActual == "Home" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index"><i class="ph ph-house"></i>Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Persona" asp-action="Index">Personas</a>
+                            <a class="nav-link @(seccionActual == "Persona" ? "active" : "")" asp-area="" asp-controller="Persona" asp-action="Index"><i class="ph ph-users"></i>Personas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Profesion" asp-action="Index">Profesiones</a>
+                            <a class="nav-link @(seccionActual == "Profesion" ? "active" : "")" asp-area="" asp-controller="Profesion" asp-action="Index"><i class="ph ph-briefcase"></i>Profesiones</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Estudio" asp-action="Index">Estudios</a>
+                            <a class="nav-link @(seccionActual == "Estudio" ? "active" : "")" asp-area="" asp-controller="Estudio" asp-action="Index"><i class="ph ph-graduation-cap"></i>Estudios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Telefono" asp-action="Index">Telefonos</a>
+                            <a class="nav-link @(seccionActual == "Telefono" ? "active" : "")" asp-area="" asp-controller="Telefono" asp-action="Index"><i class="ph ph-phone"></i>Teléfonos</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="~/swagger">Swagger</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="nav-item ms-md-auto">
+                            <a class="nav-link nav-api" href="~/swagger"><i class="ph ph-brackets-curly"></i>API Swagger</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    @*
+        @RenderBody(): punto donde se inyecta el HTML de la vista solicitada
+        (por ejemplo Persona/Index). Es obligatorio en todo layout y solo puede
+        aparecer una vez.
+    *@
+    <div class="container app-main">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer">
         <div class="container">
-            &copy; 2026 - personapi_dotnet - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <span>&copy; 2026 PersonaAPI. Laboratorio 1 de Arquitectura de Software.</span>
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
         </div>
     </footer>
+    @*
+        Scripts al final del body para que la pagina se pinte antes de cargarlos.
+        Orden: jQuery primero porque Bootstrap y la validacion dependen de el.
+    *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @*
+        RenderSectionAsync("Scripts"): aqui se renderiza el bloque
+        "@section Scripts { ... }" que defina la vista (los Create/Edit cargan
+        _ValidationScriptsPartial). required: false porque no todas las vistas
+        definen esa seccion. Va despues de jQuery para que sus scripts lo tengan
+        disponible.
+    *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

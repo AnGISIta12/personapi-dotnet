@@ -1,31 +1,65 @@
+@*
+    Vista Persona/Delete (DELETE - confirmacion)
+    Muestra los datos de la persona y pide confirmar antes de borrar.
+    Modelo: Persona.
+    La llama: PersonaController.Delete(int id) [GET]. Ese GET NO borra nada:
+    un simple enlace (o un buscador que lo siga) no debe poder eliminar datos.
+    Envia a: PersonaController.DeleteConfirmed(int id) [POST], que en MVC se
+    llama "Delete" gracias a [ActionName("Delete")].
+*@
 @model personapi_dotnet.Models.Entities.Persona
 
 @{
-    ViewData["Title"] = "Eliminar";
+    ViewData["Title"] = "Eliminar persona";
 }
 
-<h1>Eliminar</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a personas</a>
 
-<h3>Seguro que quiere eliminar esta persona? Tambien se borran sus telefonos y estudios.</h3>
-<div>
-    <h4>Persona</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Cedula</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Cc)</dd>
-        <dt class="col-sm-2">Nombre</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Nombre)</dd>
-        <dt class="col-sm-2">Apellido</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Apellido)</dd>
-        <dt class="col-sm-2">Genero</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Genero)</dd>
-        <dt class="col-sm-2">Edad</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Edad)</dd>
+<div class="surface detail-card danger-card reveal" style="--i:1">
+    <div class="warning">
+        <i class="ph ph-warning"></i>
+        <div>
+            <strong>¿Seguro que quieres eliminar a esta persona?</strong>
+            <span>También se borrarán sus teléfonos y estudios. Esta acción no se puede deshacer.</span>
+        </div>
+    </div>
+    <dl class="detail-list">
+        <div class="detail-item">
+            <dt>Cédula</dt>
+            <dd>@Html.DisplayFor(model => model.Cc)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Nombre</dt>
+            <dd>@Html.DisplayFor(model => model.Nombre)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Apellido</dt>
+            <dd>@Html.DisplayFor(model => model.Apellido)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Género</dt>
+            <dd>@Html.DisplayFor(model => model.Genero)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Edad</dt>
+            <dd>@Html.DisplayFor(model => model.Edad)</dd>
+        </div>
     </dl>
 
+    @*
+        Formulario de confirmacion: POST a /Persona/Delete con el token
+        antifalsificacion que agrega el tag helper del form.
+        El campo oculto name="id" lleva la cedula (PK) que recibe el parametro
+        "int id" de DeleteConfirmed; no se muestra porque la llave no se edita,
+        solo identifica el registro a borrar.
+        El repositorio borra antes los telefonos y estudios de la persona para no
+        violar las llaves foraneas (de ahi la advertencia de arriba).
+    *@
     <form asp-action="Delete">
         <input type="hidden" name="id" value="@Model.Cc" />
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver a la lista</a>
+        <div class="form-actions">
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
     </form>
 </div>

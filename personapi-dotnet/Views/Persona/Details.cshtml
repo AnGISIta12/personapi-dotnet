@@ -1,28 +1,56 @@
+@*
+    Vista Persona/Details (READ - un registro)
+    Muestra todos los datos de una persona, solo lectura.
+    Modelo: Persona.
+    La llama: PersonaController.Details(int id) [GET] (/Persona/Details/{cc}).
+    No envia formularios; solo enlaza a Edit y de vuelta a Index.
+*@
 @model personapi_dotnet.Models.Entities.Persona
 
 @{
-    ViewData["Title"] = "Detalles";
+    ViewData["Title"] = "Detalles de persona";
 }
 
-<h1>Detalles</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a personas</a>
 
-<div>
-    <h4>Persona</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Cedula</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Cc)</dd>
-        <dt class="col-sm-2">Nombre</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Nombre)</dd>
-        <dt class="col-sm-2">Apellido</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Apellido)</dd>
-        <dt class="col-sm-2">Genero</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Genero)</dd>
-        <dt class="col-sm-2">Edad</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Edad)</dd>
+@*
+    Lista de definicion (dl/dt/dd): dt = nombre del campo, dd = valor.
+    @Html.DisplayFor(model => model.X) muestra el valor con la plantilla segun
+    su tipo y codificado en HTML.
+    El enlace Editar pasa la cedula con asp-route-id="@Model.Cc".
+*@
+<div class="surface detail-card reveal" style="--i:1">
+    <div class="form-head">
+        <span class="icon-tile blue"><i class="ph ph-user"></i></span>
+        <div>
+            <h2>@Html.DisplayFor(model => model.Nombre) @Html.DisplayFor(model => model.Apellido)</h2>
+            <p>Datos de la persona</p>
+        </div>
+    </div>
+    <dl class="detail-list">
+        <div class="detail-item">
+            <dt>Cédula</dt>
+            <dd>@Html.DisplayFor(model => model.Cc)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Nombre</dt>
+            <dd>@Html.DisplayFor(model => model.Nombre)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Apellido</dt>
+            <dd>@Html.DisplayFor(model => model.Apellido)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Género</dt>
+            <dd>@Html.DisplayFor(model => model.Genero)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Edad</dt>
+            <dd>@Html.DisplayFor(model => model.Edad)</dd>
+        </div>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Cc">Editar</a> |
-    <a asp-action="Index">Volver a la lista</a>
+    <div class="form-actions">
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Cc"><i class="ph ph-pencil-simple"></i>Editar</a>
+        <a class="btn btn-ghost" asp-action="Index">Volver a la lista</a>
+    </div>
 </div>

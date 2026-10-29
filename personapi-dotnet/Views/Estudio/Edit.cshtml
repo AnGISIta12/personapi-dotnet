@@ -1,49 +1,72 @@
+@*
+    Vista Estudio/Edit (UPDATE)
+    Permite cambiar la fecha y la universidad de un estudio existente.
+    Modelo: Estudio (con persona y profesion cargadas por Include).
+    La llama: EstudioController.Edit(int idProf, int ccPer) [GET]
+    (/Estudio/Edit?idProf=..&ccPer=..).
+    Envia a: EstudioController.Edit(Estudio) [POST].
+*@
 @model personapi_dotnet.Models.Entities.Estudio
 
 @{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Editar estudio";
 }
 
-<h1>Editar</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a estudios</a>
 
-<h4>Estudio</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @* persona y profesion son la llave, solo se muestran *@
-            <input type="hidden" asp-for="CcPer" />
-            <input type="hidden" asp-for="IdProf" />
-            <div class="form-group">
+@*
+    La llave compuesta (IdProf, CcPer) NO se edita: cambiar persona o profesion
+    seria en realidad borrar un estudio y crear otro. Por eso:
+    - Dos <input type="hidden" asp-for>: envian ambas partes de la llave en el
+      POST para que el controlador sepa que fila actualizar.
+    - Dos <input disabled>: solo muestran la persona y la profesion (los campos
+      disabled no se envian). Usan ?. porque si el POST vuelve con errores el
+      modelo reconstruido no trae las propiedades de navegacion (son null).
+    - No hay <select> ni SelectList, a diferencia de Create.
+    El resto igual que Create: POST con token antifalsificacion, asp-for y
+    asp-validation-for para Fecha y Univer.
+*@
+<div class="surface form-card reveal" style="--i:1">
+    <div class="form-head">
+        <span class="icon-tile green"><i class="ph ph-graduation-cap"></i></span>
+        <div>
+            <h2>Editar estudio</h2>
+            <p>Actualiza la fecha y la universidad. La persona y la profesión no se pueden cambiar.</p>
+        </div>
+    </div>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @* persona y profesion son la llave, solo se muestran *@
+        <input type="hidden" asp-for="CcPer" />
+        <input type="hidden" asp-for="IdProf" />
+        <div class="row">
+            <div class="col-md-6 form-group">
                 <label class="control-label">Persona</label>
                 <input value="@Model.CcPer @Model.CcPerNavigation?.Nombre @Model.CcPerNavigation?.Apellido" class="form-control" disabled />
             </div>
-            <div class="form-group">
-                <label class="control-label">Profesion</label>
+            <div class="col-md-6 form-group">
+                <label class="control-label">Profesión</label>
                 <input value="@Model.IdProf @Model.IdProfNavigation?.Nom" class="form-control" disabled />
             </div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
+            <div class="col-md-6 form-group">
+                <label asp-for="Fecha" class="control-label">Fecha</label>
                 <input asp-for="Fecha" type="date" class="form-control" />
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="Univer" class="control-label">Universidad</label>
                 <input asp-for="Univer" class="form-control" maxlength="50" />
                 <span asp-validation-for="Univer" class="text-danger"></span>
             </div>
-            <div class="form-group mt-2">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Volver a la lista</a>
-</div>
-
+@* Validacion del lado del cliente (ver _ValidationScriptsPartial). *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

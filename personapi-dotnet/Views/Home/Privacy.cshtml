@@ -1,6 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Privacy Policy";
+﻿@*
+    Vista Home/Privacy
+    Pagina estatica de la plantilla por defecto de ASP.NET Core MVC. No recibe
+    modelo; se llama desde HomeController.Privacy(). Se conserva porque el pie
+    de pagina de _Layout la enlaza.
+*@
+@{
+    ViewData["Title"] = "Privacidad";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="page-head reveal">
+    <div>
+        <h1>Privacidad</h1>
+        <p class="lede">Información sobre el uso de los datos en esta aplicación.</p>
+    </div>
+</div>
+
+<div class="surface detail-card reveal" style="--i:1">
+    <p class="mb-0">Esta aplicación es un laboratorio académico y los datos que se registran son de prueba. Aquí puedes describir la política de privacidad del sitio.</p>
+</div>

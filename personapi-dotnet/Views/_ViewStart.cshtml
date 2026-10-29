@@ -1,3 +1,10 @@
-﻿@{
+﻿@*
+    _ViewStart.cshtml
+    Codigo que se ejecuta antes de renderizar cada vista. Aqui se fija el layout
+    por defecto: todas las vistas se "envuelven" en Views/Shared/_Layout.cshtml
+    (menu, estilos, scripts) sin tener que declararlo una por una. Una vista
+    puede cambiarlo o quitarlo asignando su propio valor a Layout.
+*@
+@{
     Layout = "_Layout";
 }

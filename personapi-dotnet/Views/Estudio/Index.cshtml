@@ -1,37 +1,79 @@
+@*
+    Vista Estudio/Index (READ - listado)
+    Tabla con todos los estudios (relacion persona-profesion).
+    Modelo: IEnumerable<Estudio>. El repositorio carga tambien las propiedades
+    de navegacion CcPerNavigation (Persona) e IdProfNavigation (Profesion) con
+    Include, para mostrar nombres y no solo las llaves numericas.
+    La llama: EstudioController.Index() (GET /Estudio).
+*@
 @model IEnumerable<personapi_dotnet.Models.Entities.Estudio>
 
 @{
     ViewData["Title"] = "Estudios";
 }
 
-<h1>Estudios</h1>
-
-<p>
-    <a asp-action="Create">Crear nuevo</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Persona</th>
-            <th>Profesion</th>
-            <th>Fecha</th>
-            <th>Universidad</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>@item.CcPer - @item.CcPerNavigation.Nombre @item.CcPerNavigation.Apellido</td>
-            <td>@item.IdProfNavigation.Nom</td>
-            <td>@item.Fecha?.ToString("yyyy-MM-dd")</td>
-            <td>@Html.DisplayFor(modelItem => item.Univer)</td>
-            <td>
-                <a asp-action="Edit" asp-route-idProf="@item.IdProf" asp-route-ccPer="@item.CcPer">Editar</a> |
-                <a asp-action="Details" asp-route-idProf="@item.IdProf" asp-route-ccPer="@item.CcPer">Detalles</a> |
-                <a asp-action="Delete" asp-route-idProf="@item.IdProf" asp-route-ccPer="@item.CcPer">Eliminar</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="page-head reveal">
+    <div>
+        <h1>Estudios</h1>
+        <p class="lede">Las profesiones que ha estudiado cada persona. Desde aquí puedes ver, editar o eliminar cada registro.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear nuevo</a>
+</div>
+@*
+    - @foreach: una fila por estudio.
+    - Persona y Profesion se leen de las propiedades de navegacion.
+    - Fecha es DateTime? (nullable, columna DATE): con ?. y ToString("yyyy-MM-dd")
+      se muestra solo la fecha, sin la hora 00:00:00, y si es null no se
+      escribe nada en vez de lanzar una excepcion.
+    - LLAVE COMPUESTA: un estudio se identifica por (IdProf, CcPer), no por un
+      solo id. Por eso los enlaces no usan asp-route-id sino DOS parametros:
+      asp-route-idProf y asp-route-ccPer. Como no estan en la plantilla de ruta
+      {controller}/{action}/{id?}, el tag helper los pone en la query string
+      (/Estudio/Edit?idProf=1&ccPer=1010101010) y el model binding los asigna a
+      los parametros "int idProf, int ccPer" de la accion.
+    - Si no hay registros se muestra un estado vacio con el boton para crear el primero.
+*@
+<div class="surface reveal" style="--i:1">
+    @if (!Model.Any())
+    {
+        <div class="empty">
+            <i class="ph ph-graduation-cap"></i>
+            <h3>Aún no hay estudios</h3>
+            <p>Registra el primer estudio para relacionar una persona con su profesión.</p>
+            <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear estudio</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Persona</th>
+                        <th>Profesión</th>
+                        <th>Fecha</th>
+                        <th>Universidad</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model) {
+                    <tr>
+                        <td>@item.CcPer - @item.CcPerNavigation.Nombre @item.CcPerNavigation.Apellido</td>
+                        <td><span class="tag green">@item.IdProfNavigation.Nom</span></td>
+                        <td>@item.Fecha?.ToString("yyyy-MM-dd")</td>
+                        <td>@Html.DisplayFor(modelItem => item.Univer)</td>
+                        <td class="text-end-cell">
+                            <span class="row-actions">
+                                <a class="row-action" asp-action="Edit" asp-route-idProf="@item.IdProf" asp-route-ccPer="@item.CcPer"><i class="ph ph-pencil-simple"></i>Editar</a>
+                                <a class="row-action" asp-action="Details" asp-route-idProf="@item.IdProf" asp-route-ccPer="@item.CcPer"><i class="ph ph-eye"></i>Detalles</a>
+                                <a class="row-action danger" asp-action="Delete" asp-route-idProf="@item.IdProf" asp-route-ccPer="@item.CcPer"><i class="ph ph-trash"></i>Eliminar</a>
+                            </span>
+                        </td>
+                    </tr>
+            }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

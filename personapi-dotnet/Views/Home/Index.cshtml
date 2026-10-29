@@ -1,15 +1,80 @@
-﻿@{
+﻿@*
+    Vista Home/Index
+    Pagina de inicio de la aplicacion. No recibe modelo (no hay @model).
+    Se llama desde HomeController.Index() (ruta por defecto "/").
+    Ofrece accesos directos a los cuatro CRUD y a la documentacion Swagger.
+    ViewData["Title"] lo lee _Layout para armar el <title> de la pestania.
+*@
+@{
     ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">personapi-dotnet</h1>
-    <p>CRUD de personas, profesiones, estudios y telefonos (MVC + DAO).</p>
-    <p>
-        <a asp-controller="Persona" asp-action="Index">Personas</a> |
-        <a asp-controller="Profesion" asp-action="Index">Profesiones</a> |
-        <a asp-controller="Estudio" asp-action="Index">Estudios</a> |
-        <a asp-controller="Telefono" asp-action="Index">Telefonos</a> |
-        <a href="~/swagger">API (Swagger)</a>
-    </p>
-</div>
+@*
+    asp-controller + asp-action generan la URL correcta (/Persona/Index, etc.)
+    segun la tabla de rutas, en vez de escribirla a mano. Swagger no es una
+    accion MVC sino un middleware, por eso usa href directo; "~/" significa la
+    raiz de la aplicacion.
+    La clase "reveal" con --i hace que los bloques aparezcan escalonados (solo
+    si el usuario no pidio reducir el movimiento).
+*@
+<section class="hero reveal">
+    <h1>Persona API-dotnet</h1>
+    <p>CRUD de personas, profesiones, estudios y telefonos (MVC + DAO)</p>
+    <div class="actions">
+        <a class="btn btn-primary" asp-controller="Persona" asp-action="Index"><i class="ph ph-users"></i>Ver personas</a>
+        <a class="btn btn-ghost" href="~/swagger"><i class="ph ph-brackets-curly"></i>Probar la API</a>
+    </div>
+</section>
+
+<section class="bento" aria-label="Módulos de la aplicación">
+    <a class="tile personas reveal" style="--i:1" asp-controller="Persona" asp-action="Index">
+        <div class="tile-top">
+            <span class="icon-tile"><i class="ph ph-users"></i></span>
+            <i class="ph ph-arrow-up-right tile-go"></i>
+        </div>
+        <div>
+            <h3>Personas</h3>
+            <p>Cédula, nombre, género y edad de cada persona registrada.</p>
+        </div>
+    </a>
+    <a class="tile profesiones reveal" style="--i:2" asp-controller="Profesion" asp-action="Index">
+        <div class="tile-top">
+            <span class="icon-tile"><i class="ph ph-briefcase"></i></span>
+            <i class="ph ph-arrow-up-right tile-go"></i>
+        </div>
+        <div>
+            <h3>Profesiones</h3>
+            <p>El catálogo de carreras y oficios.</p>
+        </div>
+    </a>
+    <a class="tile estudios reveal" style="--i:3" asp-controller="Estudio" asp-action="Index">
+        <div class="tile-top">
+            <span class="icon-tile"><i class="ph ph-graduation-cap"></i></span>
+            <i class="ph ph-arrow-up-right tile-go"></i>
+        </div>
+        <div>
+            <h3>Estudios</h3>
+            <p>Qué estudió cada persona, dónde y cuándo.</p>
+        </div>
+    </a>
+    <a class="tile telefonos reveal" style="--i:4" asp-controller="Telefono" asp-action="Index">
+        <div class="tile-top">
+            <span class="icon-tile"><i class="ph ph-phone"></i></span>
+            <i class="ph ph-arrow-up-right tile-go"></i>
+        </div>
+        <div>
+            <h3>Teléfonos</h3>
+            <p>Números de contacto y su dueño.</p>
+        </div>
+    </a>
+    <a class="tile api reveal" style="--i:5" href="~/swagger">
+        <div class="tile-top">
+            <span class="icon-tile"><i class="ph ph-brackets-curly"></i></span>
+            <i class="ph ph-arrow-up-right tile-go"></i>
+        </div>
+        <div>
+            <h3>API REST</h3>
+            <p>Documentación interactiva con Swagger.</p>
+        </div>
+    </a>
+</section>

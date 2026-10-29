@@ -1,25 +1,43 @@
-﻿@model ErrorViewModel
+﻿@*
+    Vista Shared/Error
+    Pagina generica de error (plantilla por defecto de ASP.NET Core).
+    Modelo: ErrorViewModel, con el RequestId de la peticion que fallo.
+    Se llama desde HomeController.Error(), al que redirige el middleware
+    UseExceptionHandler("/Home/Error") cuando ocurre una excepcion no controlada
+    fuera del entorno de desarrollo. Esta en Shared porque cualquier
+    controlador podria usarla.
+*@
+@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<div class="surface detail-card danger-card reveal">
+    <div class="warning">
+        <i class="ph ph-warning"></i>
+        <div>
+            <strong>Algo salió mal</strong>
+            <span>No pudimos procesar tu solicitud. Intenta de nuevo en unos instantes.</span>
+        </div>
+    </div>
 
-@if (Model.ShowRequestId)
-{
+    @* El RequestId solo se muestra si existe; sirve para buscar el error en los logs. *@
+    @if (Model.ShowRequestId)
+    {
+        <p><strong>Request ID:</strong> <code>@Model.RequestId</code></p>
+    }
+
+    <h3>Modo de desarrollo</h3>
     <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        Cambiar al entorno <strong>Development</strong> muestra información más detallada del error.
     </p>
-}
-
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+    <p>
+        <strong>El entorno Development no debe habilitarse en aplicaciones desplegadas.</strong>
+        Puede mostrar a los usuarios información sensible de las excepciones.
+        Para depurar en local, define la variable de entorno <strong>ASPNETCORE_ENVIRONMENT</strong> como <strong>Development</strong>
+        y reinicia la aplicación.
+    </p>
+    <div class="form-actions">
+        <a class="btn btn-primary" asp-controller="Home" asp-action="Index"><i class="ph ph-house"></i>Ir al inicio</a>
+    </div>
+</div>

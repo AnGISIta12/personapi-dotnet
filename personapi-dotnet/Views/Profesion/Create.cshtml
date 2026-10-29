@@ -1,43 +1,69 @@
+@*
+    Vista Profesion/Create (CREATE)
+    Formulario para registrar una profesion nueva.
+    Modelo: Profesion (vacio en el GET; con los datos digitados si el POST
+    tiene errores de validacion).
+    La llama: ProfesionController.Create() [GET].
+    Envia a: ProfesionController.Create(Profesion) [POST].
+*@
 @model personapi_dotnet.Models.Entities.Profesion
 
 @{
-    ViewData["Title"] = "Crear";
+    ViewData["Title"] = "Crear profesión";
 }
 
-<h1>Crear</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a profesiones</a>
 
-<h4>Profesion</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+@*
+    - <form asp-action="Create">: POST a /Profesion/Create con token
+      antifalsificacion (__RequestVerificationToken) agregado automaticamente.
+    - asp-validation-summary="ModelOnly": errores generales del modelo.
+    - asp-for enlaza cada campo con la propiedad (name/id, tipo, data-val-*).
+      Cuando el <label> ya trae texto ("Nombre", "Descripción") ese texto se
+      respeta; si estuviera vacio, el tag helper pondria el nombre de la
+      propiedad (Nom, Des), que es poco claro para el usuario.
+    - El Id se digita porque en la tabla no es IDENTITY; si ya existe, el
+      controlador agrega el error al campo "Id" y sale en su asp-validation-for.
+    - Des usa <textarea> porque es VARCHAR(MAX) (texto largo).
+*@
+<div class="surface form-card reveal" style="--i:1">
+    <div class="form-head">
+        <span class="icon-tile yellow"><i class="ph ph-briefcase"></i></span>
+        <div>
+            <h2>Nueva profesión</h2>
+            <p>Completa los datos para registrarla.</p>
+        </div>
+    </div>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-6 form-group">
                 <label asp-for="Id" class="control-label"></label>
                 <input asp-for="Id" class="form-control" />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="Nom" class="control-label">Nombre</label>
                 <input asp-for="Nom" class="form-control" />
                 <span asp-validation-for="Nom" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Des" class="control-label">Descripcion</label>
+            <div class="col-12 form-group">
+                <label asp-for="Des" class="control-label">Descripción</label>
                 <textarea asp-for="Des" class="form-control"></textarea>
                 <span asp-validation-for="Des" class="text-danger"></span>
             </div>
-            <div class="form-group mt-2">
-                <input type="submit" value="Crear" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Crear" class="btn btn-primary" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Volver a la lista</a>
-</div>
-
+@*
+    Seccion Scripts: se renderiza en _Layout y carga la validacion del lado del
+    cliente (_ValidationScriptsPartial).
+*@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

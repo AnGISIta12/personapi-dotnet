@@ -1,2 +1,16 @@
-﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+﻿@*
+    _ValidationScriptsPartial.cshtml
+    Vista parcial que carga las librerias de validacion del lado del cliente.
+    - jquery.validate: motor de validacion de formularios en el navegador.
+    - jquery.validate.unobtrusive: lee los atributos data-val-* que generan
+      asp-for / asp-validation-for a partir de las anotaciones del modelo
+      ([Required], [StringLength], [Range]...) y los convierte en reglas.
+    Resultado: los errores se muestran antes de enviar el formulario, sin ir al
+    servidor. Aun asi el controlador vuelve a validar con ModelState.IsValid,
+    porque la validacion en el cliente se puede saltar.
+    Solo la incluyen las vistas con formularios de captura (Create/Edit) en su
+    seccion "Scripts", para no cargar estos archivos en paginas que no los usan.
+    Depende de jQuery, que ya carga _Layout antes de renderizar esa seccion.
+*@
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

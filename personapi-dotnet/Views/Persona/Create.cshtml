@@ -1,56 +1,94 @@
+@*
+    Vista Persona/Create (CREATE)
+    Formulario para registrar una persona nueva.
+    Modelo: Persona (vacio en el GET; con los datos digitados si el POST falla
+    la validacion y se vuelve a mostrar el formulario).
+    La llama: PersonaController.Create() [GET].
+    Envia a: PersonaController.Create(Persona) [POST], que valida ModelState y
+    guarda mediante el repositorio.
+*@
 @model personapi_dotnet.Models.Entities.Persona
 
 @{
-    ViewData["Title"] = "Crear";
+    ViewData["Title"] = "Crear persona";
 }
 
-<h1>Crear</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a personas</a>
 
-<h4>Persona</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Cc" class="control-label">Cedula</label>
+@*
+    Formulario:
+    - <form asp-action="Create"> genera action="/Persona/Create" y method="post".
+      Ademas el tag helper inserta automaticamente un campo oculto
+      __RequestVerificationToken (equivalente a @Html.AntiForgeryToken()), que
+      la accion valida con [ValidateAntiForgeryToken] para evitar ataques CSRF.
+    - asp-validation-summary="ModelOnly": muestra solo los errores generales del
+      modelo (agregados con ModelState.AddModelError("", ...)), no los de cada
+      campo, que ya salen junto a su input.
+    - asp-for="Propiedad": enlaza cada label/input con la propiedad del modelo.
+      Genera name e id iguales a la propiedad (para que el model binding llene
+      el objeto en el POST), el type del input segun el tipo de dato y los
+      atributos data-val-* de validacion a partir de las anotaciones.
+    - asp-validation-for: <span> donde aparece el error de ese campo, tanto en
+      el cliente (jQuery Validation) como en el servidor (ModelState).
+    - En Create la cedula SI se digita, porque es la PK y no es autogenerada.
+      Si ya existe, el controlador agrega el error al campo "Cc" y aparece en
+      su asp-validation-for.
+    - genero es un <select> con solo M y F, coherente con el CHECK de la base.
+    - La rejilla de Bootstrap (row/col-md-6) acomoda los campos de a dos en
+      pantallas medianas y de a uno en celulares.
+*@
+<div class="surface form-card reveal" style="--i:1">
+    <div class="form-head">
+        <span class="icon-tile blue"><i class="ph ph-user-plus"></i></span>
+        <div>
+            <h2>Nueva persona</h2>
+            <p>Completa los datos para registrarla.</p>
+        </div>
+    </div>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label asp-for="Cc" class="control-label">Cédula</label>
                 <input asp-for="Cc" class="form-control" />
                 <span asp-validation-for="Cc" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" />
-                <span asp-validation-for="Apellido" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Genero" class="control-label"></label>
+            <div class="col-md-6 form-group">
+                <label asp-for="Genero" class="control-label">Género</label>
                 <select asp-for="Genero" class="form-control">
                     <option value="M">M</option>
                     <option value="F">F</option>
                 </select>
                 <span asp-validation-for="Genero" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class="form-control" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
                 <label asp-for="Edad" class="control-label"></label>
                 <input asp-for="Edad" class="form-control" />
                 <span asp-validation-for="Edad" class="text-danger"></span>
             </div>
-            <div class="form-group mt-2">
-                <input type="submit" value="Crear" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Crear" class="btn btn-primary" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Volver a la lista</a>
-</div>
-
+@*
+    Seccion Scripts: se inyecta en el RenderSectionAsync("Scripts") de _Layout.
+    Carga _ValidationScriptsPartial para validar en el navegador antes de
+    enviar el formulario (el servidor vuelve a validar de todas formas).
+*@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

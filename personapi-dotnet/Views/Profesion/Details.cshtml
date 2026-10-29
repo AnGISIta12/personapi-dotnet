@@ -1,24 +1,43 @@
+@*
+    Vista Profesion/Details (READ - un registro)
+    Muestra los datos de una profesion en modo solo lectura.
+    Modelo: Profesion.
+    La llama: ProfesionController.Details(int id) [GET] (/Profesion/Details/{id}).
+    No envia formularios; los valores se muestran con @Html.DisplayFor y el
+    enlace Editar pasa la PK con asp-route-id.
+*@
 @model personapi_dotnet.Models.Entities.Profesion
 
 @{
-    ViewData["Title"] = "Detalles";
+    ViewData["Title"] = "Detalles de profesión";
 }
 
-<h1>Detalles</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a profesiones</a>
 
-<div>
-    <h4>Profesion</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Id</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Id)</dd>
-        <dt class="col-sm-2">Nombre</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Nom)</dd>
-        <dt class="col-sm-2">Descripcion</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Des)</dd>
+<div class="surface detail-card reveal" style="--i:1">
+    <div class="form-head">
+        <span class="icon-tile yellow"><i class="ph ph-briefcase"></i></span>
+        <div>
+            <h2>@Html.DisplayFor(model => model.Nom)</h2>
+            <p>Datos de la profesión</p>
+        </div>
+    </div>
+    <dl class="detail-list">
+        <div class="detail-item">
+            <dt>Id</dt>
+            <dd>@Html.DisplayFor(model => model.Id)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Nombre</dt>
+            <dd>@Html.DisplayFor(model => model.Nom)</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Descripción</dt>
+            <dd>@Html.DisplayFor(model => model.Des)</dd>
+        </div>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
-    <a asp-action="Index">Volver a la lista</a>
+    <div class="form-actions">
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id"><i class="ph ph-pencil-simple"></i>Editar</a>
+        <a class="btn btn-ghost" asp-action="Index">Volver a la lista</a>
+    </div>
 </div>

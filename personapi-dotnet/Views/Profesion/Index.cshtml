@@ -1,35 +1,70 @@
+@*
+    Vista Profesion/Index (READ - listado)
+    Tabla con todas las profesiones.
+    Modelo: IEnumerable<Profesion>, devuelto por el repositorio (DAO).
+    La llama: ProfesionController.Index() (GET /Profesion).
+    Desde aqui se navega a Create, Edit, Details y Delete.
+*@
 @model IEnumerable<personapi_dotnet.Models.Entities.Profesion>
 
 @{
     ViewData["Title"] = "Profesiones";
 }
 
-<h1>Profesiones</h1>
+@* Encabezado de pagina: titulo y boton de crear. asp-action sin asp-controller asume el controlador actual (Profesion). *@
+<div class="page-head reveal">
+    <div>
+        <h1>Profesiones</h1>
+        <p class="lede">Todas las profesiones registradas. Desde aquí puedes ver sus datos, editarlas o eliminarlas.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear nueva</a>
+</div>
 
-<p>
-    <a asp-action="Create">Crear nueva</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Nombre</th>
-            <th>Descripcion</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.Id)</td>
-            <td>@Html.DisplayFor(modelItem => item.Nom)</td>
-            <td>@Html.DisplayFor(modelItem => item.Des)</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@*
+    @foreach genera una fila por profesion; @Html.DisplayFor muestra cada valor
+    codificado en HTML. asp-route-id="@item.Id" pone la PK en la URL
+    (/Profesion/Edit/1), que llega al parametro "int id" de la accion.
+    Si no hay registros se muestra un estado vacio con el boton para crear la primera.
+*@
+<div class="surface reveal" style="--i:1">
+    @if (!Model.Any())
+    {
+        <div class="empty">
+            <i class="ph ph-briefcase"></i>
+            <h3>Aún no hay profesiones</h3>
+            <p>Crea la primera profesión para poder asignarla a los estudios.</p>
+            <a class="btn btn-primary" asp-action="Create"><i class="ph ph-plus"></i>Crear profesión</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model) {
+                    <tr>
+                        <td class="num"><span class="tag yellow">@Html.DisplayFor(modelItem => item.Id)</span></td>
+                        <td>@Html.DisplayFor(modelItem => item.Nom)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Des)</td>
+                        <td class="text-end-cell">
+                            <span class="row-actions">
+                                <a class="row-action" asp-action="Edit" asp-route-id="@item.Id"><i class="ph ph-pencil-simple"></i>Editar</a>
+                                <a class="row-action" asp-action="Details" asp-route-id="@item.Id"><i class="ph ph-eye"></i>Detalles</a>
+                                <a class="row-action danger" asp-action="Delete" asp-route-id="@item.Id"><i class="ph ph-trash"></i>Eliminar</a>
+                            </span>
+                        </td>
+                    </tr>
+            }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

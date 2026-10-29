@@ -1,30 +1,60 @@
+@*
+    Vista Estudio/Delete (DELETE - confirmacion)
+    Muestra el estudio y pide confirmar el borrado.
+    Modelo: Estudio.
+    La llama: EstudioController.Delete(int idProf, int ccPer) [GET], que no
+    borra nada.
+    Envia a: EstudioController.DeleteConfirmed(int idProf, int ccPer) [POST],
+    expuesta como "Delete" con [ActionName("Delete")].
+*@
 @model personapi_dotnet.Models.Entities.Estudio
 
 @{
-    ViewData["Title"] = "Eliminar";
+    ViewData["Title"] = "Eliminar estudio";
 }
 
-<h1>Eliminar</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a estudios</a>
 
-<h3>Seguro que quiere eliminar este estudio?</h3>
-<div>
-    <h4>Estudio</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Persona</dt>
-        <dd class="col-sm-10">@Model.CcPer - @Model.CcPerNavigation.Nombre @Model.CcPerNavigation.Apellido</dd>
-        <dt class="col-sm-2">Profesion</dt>
-        <dd class="col-sm-10">@Model.IdProf - @Model.IdProfNavigation.Nom</dd>
-        <dt class="col-sm-2">Fecha</dt>
-        <dd class="col-sm-10">@Model.Fecha?.ToString("yyyy-MM-dd")</dd>
-        <dt class="col-sm-2">Universidad</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Univer)</dd>
+<div class="surface detail-card danger-card reveal" style="--i:1">
+    <div class="warning">
+        <i class="ph ph-warning"></i>
+        <div>
+            <strong>¿Seguro que quieres eliminar este estudio?</strong>
+            <span>Esta acción no se puede deshacer.</span>
+        </div>
+    </div>
+    <dl class="detail-list">
+        <div class="detail-item">
+            <dt>Persona</dt>
+            <dd>@Model.CcPer - @Model.CcPerNavigation.Nombre @Model.CcPerNavigation.Apellido</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Profesión</dt>
+            <dd>@Model.IdProf - @Model.IdProfNavigation.Nom</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Fecha</dt>
+            <dd>@Model.Fecha?.ToString("yyyy-MM-dd")</dd>
+        </div>
+        <div class="detail-item">
+            <dt>Universidad</dt>
+            <dd>@Html.DisplayFor(model => model.Univer)</dd>
+        </div>
     </dl>
 
+    @*
+        Form POST con token antifalsificacion. Como la llave es compuesta se
+        necesitan DOS campos ocultos; sus atributos name ("idProf" y "ccPer")
+        coinciden con los parametros de DeleteConfirmed para que el model
+        binding los asigne. Estudios es tabla hija, asi que se borra sin tocar
+        otras tablas.
+    *@
     <form asp-action="Delete">
         <input type="hidden" name="idProf" value="@Model.IdProf" />
         <input type="hidden" name="ccPer" value="@Model.CcPer" />
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver a la lista</a>
+        <div class="form-actions">
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
     </form>
 </div>

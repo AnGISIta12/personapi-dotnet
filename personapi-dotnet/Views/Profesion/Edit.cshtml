@@ -1,43 +1,62 @@
+@*
+    Vista Profesion/Edit (UPDATE)
+    Formulario precargado con los datos actuales de la profesion.
+    Modelo: Profesion.
+    La llama: ProfesionController.Edit(int id) [GET] (/Profesion/Edit/{id}).
+    Envia a: ProfesionController.Edit(int id, Profesion) [POST], que verifica
+    que el id de la URL coincida con el del formulario antes de actualizar.
+*@
 @model personapi_dotnet.Models.Entities.Profesion
 
 @{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Editar profesión";
 }
 
-<h1>Editar</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a profesiones</a>
 
-<h4>Profesion</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
+@*
+    El Id es la PK y no se edita (cambiarlo romperia la FK de estudios):
+    - <input type="hidden" asp-for="Id">: viaja en el POST para identificar el
+      registro.
+    - <input ... disabled>: solo lo muestra; los campos disabled no se envian.
+    El resto funciona igual que Create: form POST con token antifalsificacion,
+    asp-for y asp-validation-for por campo.
+*@
+<div class="surface form-card reveal" style="--i:1">
+    <div class="form-head">
+        <span class="icon-tile yellow"><i class="ph ph-briefcase"></i></span>
+        <div>
+            <h2>Editar profesión</h2>
+            <p>Actualiza sus datos. El identificador no se puede cambiar.</p>
+        </div>
+    </div>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="row">
+            <div class="col-md-6 form-group">
                 <label class="control-label">Id</label>
                 <input value="@Model.Id" class="form-control" disabled />
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label asp-for="Nom" class="control-label">Nombre</label>
                 <input asp-for="Nom" class="form-control" />
                 <span asp-validation-for="Nom" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Des" class="control-label">Descripcion</label>
+            <div class="col-12 form-group">
+                <label asp-for="Des" class="control-label">Descripción</label>
                 <textarea asp-for="Des" class="form-control"></textarea>
                 <span asp-validation-for="Des" class="text-danger"></span>
             </div>
-            <div class="form-group mt-2">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Volver a la lista</a>
-</div>
-
+@* Validacion del lado del cliente (ver _ValidationScriptsPartial). *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

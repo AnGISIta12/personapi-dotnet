@@ -1,57 +1,81 @@
+@*
+    Vista Persona/Edit (UPDATE)
+    Formulario precargado con los datos actuales de una persona.
+    Modelo: Persona (la que encontro el repositorio por su cedula).
+    La llama: PersonaController.Edit(int id) [GET], desde el enlace "Editar" de
+    Index o Details (/Persona/Edit/{cc}).
+    Envia a: PersonaController.Edit(int id, Persona) [POST], que comprueba que
+    la cedula de la URL coincida con la del formulario y actualiza.
+*@
 @model personapi_dotnet.Models.Entities.Persona
 
 @{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Editar persona";
 }
 
-<h1>Editar</h1>
+<a class="crumb reveal" asp-action="Index"><i class="ph ph-arrow-left"></i>Volver a personas</a>
 
-<h4>Persona</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @* la cedula es la llave, no se deja cambiar *@
-            <input type="hidden" asp-for="Cc" />
-            <div class="form-group">
-                <label class="control-label">Cedula</label>
+@*
+    Igual que en Create: <form asp-action="Edit"> hace POST, incluye el token
+    antifalsificacion y conserva el id de la URL actual (/Persona/Edit/{cc});
+    asp-for / asp-validation-for enlazan y validan cada campo.
+    Diferencia clave: la cedula (PK) NO se edita. Cambiar la llave primaria
+    equivaldria a otro registro y romperia las FK de telefono y estudios.
+    Por eso se usan dos campos:
+    - <input type="hidden" asp-for="Cc">: envia la cedula en el POST para que
+      el model binding sepa que persona actualizar.
+    - <input ... disabled>: solo la muestra; un campo disabled NO se envia en el
+      formulario, por eso hace falta el oculto.
+*@
+<div class="surface form-card reveal" style="--i:1">
+    <div class="form-head">
+        <span class="icon-tile blue"><i class="ph ph-user-gear"></i></span>
+        <div>
+            <h2>Editar persona</h2>
+            <p>Actualiza sus datos. La cédula no se puede cambiar.</p>
+        </div>
+    </div>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @* la cedula es la llave, no se deja cambiar *@
+        <input type="hidden" asp-for="Cc" />
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label class="control-label">Cédula</label>
                 <input value="@Model.Cc" class="form-control" disabled />
             </div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" />
-                <span asp-validation-for="Apellido" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Genero" class="control-label"></label>
+            <div class="col-md-6 form-group">
+                <label asp-for="Genero" class="control-label">Género</label>
                 <select asp-for="Genero" class="form-control">
                     <option value="M">M</option>
                     <option value="F">F</option>
                 </select>
                 <span asp-validation-for="Genero" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="col-md-6 form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class="form-control" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
                 <label asp-for="Edad" class="control-label"></label>
                 <input asp-for="Edad" class="form-control" />
                 <span asp-validation-for="Edad" class="text-danger"></span>
             </div>
-            <div class="form-group mt-2">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+            <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Volver a la lista</a>
-</div>
-
+@* Validacion del lado del cliente (ver _ValidationScriptsPartial). *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
